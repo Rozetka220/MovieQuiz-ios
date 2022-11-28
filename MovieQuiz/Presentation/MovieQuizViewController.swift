@@ -104,9 +104,6 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
-        // здесь мы показываем результат прохождения квиза
-        // создаём объекты всплывающего окна
-        
         let alert = UIAlertController(title: result.title,
                                       message: result.text,
                                       preferredStyle: .alert) // preferredStyle может быть .alert или .actionSheet
@@ -121,34 +118,12 @@ final class MovieQuizViewController: UIViewController {
             self.show(quiz: viewModel)
         }
         correctAnswers = 0
-        //show(quiz: convert(model : questions[currentQuestionIndex]))
         alert.addAction(action)
         // показываем всплывающее окно
         self.present(alert, animated: true, completion: nil)
     }
-    /*
-    private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
-            self.currentQuestionIndex = 0
-            
-            // заново показываем первый вопрос
-            let firstQuestion = self.questions[self.currentQuestionIndex]
-            let viewModel = self.convert(model: firstQuestion)
-            self.show(quiz: viewModel)
-        }
-        correctAnswers = 0
-        alert.addAction(action)
-        
-        self.present(alert, animated: true, completion: nil)
-    }
-    */
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        // Попробуйте написать код конвертации сами
         return QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
@@ -171,8 +146,7 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     private func showNextQuestionOrResults() {
-      if currentQuestionIndex == questions.count - 1 { // - 1 потому что индекс начинается с 0, а длинна массива — с 1
-        // показать результат квиза
+      if currentQuestionIndex == questions.count - 1 {
           let text = "Ваш результат: \(correctAnswers) из 10"
                   let viewModel = QuizResultsViewModel(
                       title: "Этот раунд окончен!",
@@ -180,9 +154,7 @@ final class MovieQuizViewController: UIViewController {
                       buttonText: "Сыграть ещё раз")
                   show(quiz: viewModel)
       } else {
-        currentQuestionIndex += 1 // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
-        // показать следующий вопрос
-        //отступил от авторского решения
+        currentQuestionIndex += 1
         show(quiz: convert(model : questions[currentQuestionIndex]))
       }
     }
