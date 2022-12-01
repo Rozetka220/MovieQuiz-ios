@@ -26,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="0bp-ZA-CAo">
-                                <rect key="frame" x="20" y="58" width="374" height="832.5"/>
+                                <rect key="frame" x="20" y="58" width="374" height="804"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tjx-v2-sPJ" userLabel="Stack View top label">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
@@ -60,24 +60,24 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o2u-LT-AvS">
-                                        <rect key="frame" x="0.0" y="624.5" width="374" height="128"/>
+                                        <rect key="frame" x="0.0" y="624.5" width="374" height="99.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCN-qB-hCS" userLabel="Question Label">
-                                                <rect key="frame" x="42" y="13" width="290" height="102"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 6?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="SCN-qB-hCS" userLabel="Question Label">
+                                                <rect key="frame" x="0.0" y="3" width="374" height="93.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                                 <color key="textColor" name="YP White (iOS)"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="SCN-qB-hCS" firstAttribute="top" secondItem="o2u-LT-AvS" secondAttribute="top" constant="13" id="C9q-rb-AvA"/>
-                                            <constraint firstAttribute="bottom" secondItem="SCN-qB-hCS" secondAttribute="bottom" constant="13" id="DWf-6T-ld7"/>
-                                            <constraint firstAttribute="trailing" secondItem="SCN-qB-hCS" secondAttribute="trailing" constant="42" id="R7O-kd-wes"/>
-                                            <constraint firstItem="SCN-qB-hCS" firstAttribute="leading" secondItem="o2u-LT-AvS" secondAttribute="leading" constant="42" id="aau-1l-d5P"/>
+                                            <constraint firstItem="SCN-qB-hCS" firstAttribute="top" secondItem="o2u-LT-AvS" secondAttribute="top" constant="3" id="C9q-rb-AvA"/>
+                                            <constraint firstAttribute="bottom" secondItem="SCN-qB-hCS" secondAttribute="bottom" constant="3" id="DWf-6T-ld7"/>
+                                            <constraint firstAttribute="trailing" secondItem="SCN-qB-hCS" secondAttribute="trailing" id="R7O-kd-wes"/>
+                                            <constraint firstItem="SCN-qB-hCS" firstAttribute="leading" secondItem="o2u-LT-AvS" secondAttribute="leading" id="aau-1l-d5P"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-PT-isw" userLabel="Stack View button">
-                                        <rect key="frame" x="0.0" y="772.5" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="744" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBm-mR-JvC">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -121,6 +121,9 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="ZrM-PT-isw" secondAttribute="bottom" id="4nE-M7-uKY"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -128,6 +131,7 @@
                         <constraints>
                             <constraint firstItem="0bp-ZA-CAo" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="3Yt-19-oIl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0bp-ZA-CAo" secondAttribute="trailing" constant="20" id="Irh-qD-OZ6"/>
+                            <constraint firstItem="0bp-ZA-CAo" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="aKx-BZ-wOb"/>
                             <constraint firstItem="0bp-ZA-CAo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="gL5-xo-3Qe"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
