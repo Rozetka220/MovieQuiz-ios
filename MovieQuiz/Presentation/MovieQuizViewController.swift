@@ -7,6 +7,11 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet weak private var counterLabel: UILabel!
     @IBOutlet weak private var textLabel: UILabel!
     
+    
+    @IBOutlet weak var nButton: UIButton!
+    
+    @IBOutlet weak var yButton: UIButton!
+    
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     
@@ -81,7 +86,8 @@ final class MovieQuizViewController: UIViewController {
         
     }
     
-    @IBAction private func yesButton(_ sender: Any) {
+    
+    @IBAction func yesButton(_ sender: Any) {
         if questions[currentQuestionIndex].correctAnswer == true{
             showAnswerResult(isCorrect: true)
         } else {
@@ -89,14 +95,13 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     
-    @IBAction private func noButton(_ sender: Any) {
+    @IBAction func noButton(_ sender: Any) {
         if questions[currentQuestionIndex].correctAnswer == true{
             showAnswerResult(isCorrect: false)
         } else {
             showAnswerResult(isCorrect: true)
         }
     }
-    
     private func show(quiz step: QuizStepViewModel) {
         // здесь мы заполняем нашу картинку, текст и счётчик данными
         imageView.image = step.image
@@ -132,20 +137,24 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showAnswerResult(isCorrect: Bool) {
+        nButton.isEnabled=false
+        yButton.isEnabled=false
         imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
         imageView.layer.borderWidth = 8
         if isCorrect == true {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
             correctAnswers+=1
+            
         } else {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // запускаем задачу через 1 секунду
-            // код, который вы хотите вызвать через 1 секунду,
-            // в нашем случае это просто функция showNextQuestionOrResults()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in // запускаем задачу через 1 секунду
             self.imageView.layer.borderColor = UIColor.clear.cgColor
             self.showNextQuestionOrResults()
+            yButton.isEnabled=true
+            nButton.isEnabled=true
         }
+        
     }
     
     private func showNextQuestionOrResults() {

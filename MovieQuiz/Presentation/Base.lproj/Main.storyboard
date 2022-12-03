@@ -94,7 +94,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="noButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ggv-Ck-rUc"/>
+                                                    <action selector="noButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mCO-Z8-k2y"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rd5-rl-TOB">
@@ -112,7 +112,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="yesButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="S6L-dD-ay7"/>
+                                                    <action selector="yesButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oLo-X1-oaU"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -143,7 +143,9 @@
                     <connections>
                         <outlet property="counterLabel" destination="fAP-Mj-Hqd" id="fhd-hV-Va7"/>
                         <outlet property="imageView" destination="yTI-3y-lb7" id="mwl-Fu-R3E"/>
+                        <outlet property="nButton" destination="IBm-mR-JvC" id="ryh-5H-oFH"/>
                         <outlet property="textLabel" destination="SCN-qB-hCS" id="wtT-v7-pQq"/>
+                        <outlet property="yButton" destination="Rd5-rl-TOB" id="Mlc-Rq-zBQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
