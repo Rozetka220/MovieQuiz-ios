@@ -15,7 +15,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet weak var yButton: UIButton!
     
     private let questionsAmount: Int = 10
-    private let questionFactory: QuestionFactoryProtocol? = nil
+    private var questionFactory: QuestionFactoryProtocol? = QuestionFactory()
     private var currentQuestion: QuizQuestion?
     
     private var currentQuestionIndex: Int = 0
