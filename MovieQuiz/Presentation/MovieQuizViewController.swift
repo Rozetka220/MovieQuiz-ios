@@ -1,6 +1,12 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterProtocol {
+    var delegateAlert: UIViewController?
+    
+    //var delegateAlert: AlertPresenterProtocol = AlertPresenter()
+    
+    func requestGameOverBtn(model: AlertModel){}
+    
     var delegate: QuestionFactoryDelegate?
     
     // MARK: - Lifecycle
@@ -17,12 +23,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol? = QuestionFactory()
     private var currentQuestion: QuizQuestion?
+
+    private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
     
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter?.delegateAlert = self
         questionFactory?.delegate = self
         questionFactory?.requestNextQuestion()
     }
@@ -56,12 +65,26 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz result: QuizResultsViewModel) {
+        let alertModel = AlertModel(
+             title: result.title,
+             message: result.text,
+             buttonText: result.buttonText, //maybe empty, ="Сыграть еще!"
+             completion: { [weak self] _ in
+                 guard let self = self else {return}
+                 self.currentQuestionIndex = 0
+                 self.questionFactory?.requestNextQuestion()
+             }
+        )
+        
+        alertPresenter?.requestGameOverBtn(model: alertModel)
+        
+        /*
         let alert = UIAlertController(title: result.title,
                                       message: result.text,
                                       preferredStyle: .alert) // preferredStyle может быть .alert или .actionSheet
         
         // создаём для него кнопки с действиями
-        let action = UIAlertAction(title: "Сыграть еще раз!", style: .default) { [weak self] _ in
+        let action = UIAlertAction(title: "Сыграть еще раз!", style: .default, handler: ) { [weak self] _ in
             guard let self = self else {return}
             self.currentQuestionIndex = 0
             
@@ -72,6 +95,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alert.addAction(action)
         // показываем всплывающее окно
         self.present(alert, animated: true, completion: nil)
+         */
+        correctAnswers = 0
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
