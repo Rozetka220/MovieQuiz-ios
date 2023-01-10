@@ -25,6 +25,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private var currentQuestion: QuizQuestion?
 
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
+    private var serviceStatictic: StatisticService = StatisticServiceImplementation()
     
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
@@ -34,6 +35,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         alertPresenter?.delegateAlert = self
         questionFactory?.delegate = self
         questionFactory?.requestNextQuestion()
+        
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -129,12 +131,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ? "Поздравляем, Вы ответили на 10 из 10!" : "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            serviceStatictic.store(correct: correctAnswers, total: questionsAmount)
+            let text = "Ваш результат: \(correctAnswers) из \(questionsAmount)\nКоличество сыгранных квизов: \(serviceStatictic.gamesCount)\nРекорд: \(serviceStatictic.bestGame.correct)/\(questionsAmount) \(serviceStatictic.bestGame.date.dateTimeString)\nСредняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%"
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
+            
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
