@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
+///Ответственность протокола делегата - интерфейс передачи вопроса в MovieQuizViewController
 protocol QuestionFactoryDelegate : AnyObject {
-    var delegate: QuestionFactoryDelegate? { get set }
     func didRecieveNextQuestion(question: QuizQuestion?)
 }

@@ -66,4 +66,7 @@ class QuestionFactory : QuestionFactoryProtocol {
     func didRecieveNextQuestion(question: QuizQuestion?) {
         
     }
+    init(delegate: QuestionFactoryDelegate? = nil) {
+        self.delegate = delegate
+    }
 }

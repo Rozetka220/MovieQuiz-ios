@@ -17,9 +17,9 @@ protocol StatisticService {
 
 
 final class StatisticServiceImplementation: StatisticService {
-    var totalAccuracy: Double = 0.0
+    //var totalAccuracy: Double = 0.0
     
-    var gamesCount: Int = 0
+    //var gamesCount: Int = 0
     
     private let userDefaults = UserDefaults.standard
     
@@ -27,36 +27,18 @@ final class StatisticServiceImplementation: StatisticService {
         case correct, total, bestGame, gamesCount
     }
     
-    var getSetTotalAccuracy: Double {
+    var totalAccuracy: Double {
         get{
-            guard let data = userDefaults.data(forKey: Keys.total.rawValue),
-                  let totalAccuracy = try? JSONDecoder().decode(Double.self, from: data) else {
-                    return 0
-                    }
-            return totalAccuracy
+            return userDefaults.double(forKey: Keys.total.rawValue)
         }set{
-            guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
-                return
-            }
-            totalAccuracy = newValue
-            userDefaults.set(data, forKey: Keys.total.rawValue)
+            userDefaults.set(newValue, forKey: Keys.total.rawValue)
         }
     }
-    var getSetGamesCount: Int {
+    var gamesCount: Int {
         get {
-            guard let data = userDefaults.data(forKey: Keys.gamesCount.rawValue),
-                  let gamesCount = try? JSONDecoder().decode(Int.self, from: data) else {
-                        return 0
-                    }
-            return gamesCount
+            return userDefaults.integer(forKey: Keys.gamesCount.rawValue)
         }set{
-            guard let data = try? JSONEncoder().encode(newValue) else {
-                print("Невозможно сохранить результат")
-                return
-            }
-            gamesCount = newValue
-            userDefaults.set(data, forKey: Keys.gamesCount.rawValue)
+            userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
         }
     }
     var bestGame: GameRecord {
@@ -76,30 +58,18 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     func store(correct count: Int, total amount: Int) {
-        //здесь должны записывать новый лучший результат в бестгейм
-        //refresh()
         var newBestGame = GameRecord(correct: count, total: amount, date: Date())
-        getSetGamesCount += 1
+        gamesCount += 1
         if newBestGame > bestGame {
             bestGame = newBestGame
         }
         averageAccuracy(correct: count, total: amount)
-        print("count = \(count) total = \(amount) totalAccuracy = \(totalAccuracy)")
     }
     func averageAccuracy(correct count: Int, total amount: Int) {
         if (gamesCount == 0) {
-            getSetTotalAccuracy = (getSetTotalAccuracy + Double(count) / Double(amount) * 100)
+            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100)
         } else {
-            getSetTotalAccuracy = (getSetTotalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
+            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
         }
-        print("count = \(count) total = \(amount) totalAccuracy = \(totalAccuracy)")
-    }
-    
-    func refresh(){
-        userDefaults.set(0, forKey: Keys.total.rawValue)
-        
-        userDefaults.set(0, forKey: Keys.gamesCount.rawValue)
-        
-        userDefaults.set(0, forKey: Keys.bestGame.rawValue)
     }
 }

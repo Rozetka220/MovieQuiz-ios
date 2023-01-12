@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
-protocol QuestionFactoryProtocol : QuestionFactoryDelegate {
+///Ответсвенность протокола - получить  вопрос из хранилища вопросов
+protocol QuestionFactoryProtocol {
     func requestNextQuestion()
 }

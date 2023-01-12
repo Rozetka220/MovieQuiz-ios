@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 
-// для состояния "Вопрос задан"
+/// для состояния "Вопрос задан"
 struct QuizStepViewModel {
     var image: UIImage
     let question: String

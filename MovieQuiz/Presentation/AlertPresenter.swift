@@ -9,10 +9,10 @@ import Foundation
 import UIKit
 
 class AlertPresenter: AlertPresenterProtocol {
-    internal weak var delegateAlert = UIViewController()
+    internal weak var alertDelegate: UIViewController?
     
-    func requestGameOverBtn(model: AlertModel) {
-        guard let delegateAlert = delegateAlert else {return}
+    func viewGameOverAlert(model: AlertModel) {
+        guard let delegateAlert = alertDelegate else {return}
         
         let alert = UIAlertController(title: model.title,
                                       message: model.message,
@@ -25,10 +25,6 @@ class AlertPresenter: AlertPresenterProtocol {
         // показываем всплывающее окно
         delegateAlert.present(alert, animated: true, completion: nil)
     }
-    /*init(delegate: UIViewController) {
-            self.delegate = delegate
-        }
-     */
 }
     
 

@@ -1,11 +1,7 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterProtocol {
-    var delegateAlert: UIViewController?
-    
-    //var delegateAlert: AlertPresenterProtocol = AlertPresenter()
-    
-    func requestGameOverBtn(model: AlertModel){}
+    var alertDelegate: UIViewController?
     
     var delegate: QuestionFactoryDelegate?
     
@@ -21,7 +17,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     @IBOutlet weak var yButton: UIButton!
     
     private let questionsAmount: Int = 10
-    private var questionFactory: QuestionFactoryProtocol? = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
 
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
@@ -32,13 +28,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter?.delegateAlert = self
-        questionFactory?.delegate = self
+        alertPresenter?.alertDelegate = self
+        questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
         
     }
     
     // MARK: - QuestionFactoryDelegate
+    
+    func viewGameOverAlert(model: AlertModel){}
+    
     func didRecieveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
                     return
@@ -50,15 +49,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         }
     }
         
-    @IBAction func yesButton(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else { return }
-        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
-    }
-    
-    @IBAction func noButton(_ sender: Any) {
+    @IBAction func yesBtnPressed(_ sender: Any) {
         guard let currentQuestion = currentQuestion else { return }
         currentQuestion.correctAnswer ? showAnswerResult(isCorrect: false) : showAnswerResult(isCorrect: true)
     }
+    @IBAction func noBtnPressed(_ sender: Any) {
+        guard let currentQuestion = currentQuestion else { return }
+        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
+    }
+   
     private func show(quiz step: QuizStepViewModel) {
         // здесь мы заполняем нашу картинку, текст и счётчик данными
         imageView.image = step.image
@@ -78,26 +77,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
              }
         )
         
-        alertPresenter?.requestGameOverBtn(model: alertModel)
-        
-        /*
-        let alert = UIAlertController(title: result.title,
-                                      message: result.text,
-                                      preferredStyle: .alert) // preferredStyle может быть .alert или .actionSheet
-        
-        // создаём для него кнопки с действиями
-        let action = UIAlertAction(title: "Сыграть еще раз!", style: .default, handler: ) { [weak self] _ in
-            guard let self = self else {return}
-            self.currentQuestionIndex = 0
-            
-            //заново показываем первый вопрос
-            self.questionFactory?.requestNextQuestion()
-        }
-        correctAnswers = 0
-        alert.addAction(action)
-        // показываем всплывающее окно
-        self.present(alert, animated: true, completion: nil)
-         */
+        alertPresenter?.viewGameOverAlert(model: alertModel)
+
         correctAnswers = 0
     }
     
@@ -132,7 +113,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 {
             serviceStatictic.store(correct: correctAnswers, total: questionsAmount)
-            let text = "Ваш результат: \(correctAnswers) из \(questionsAmount)\nКоличество сыгранных квизов: \(serviceStatictic.gamesCount)\nРекорд: \(serviceStatictic.bestGame.correct)/\(questionsAmount) \(serviceStatictic.bestGame.date.dateTimeString)\nСредняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%"
+            let text = """
+            Ваш результат: \(correctAnswers)/\(questionsAmount)
+            Количество сыгранных квизов: \(serviceStatictic.gamesCount)
+            Рекорд: \(serviceStatictic.bestGame.correct)/\(questionsAmount) (\(serviceStatictic.bestGame.date.dateTimeString))
+            Средняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%
+            """
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
                 text: text,

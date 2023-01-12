@@ -94,7 +94,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="noButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mCO-Z8-k2y"/>
+                                                    <action selector="yesBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="KIb-8e-RZQ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rd5-rl-TOB">
@@ -112,7 +112,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="yesButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oLo-X1-oaU"/>
+                                                    <action selector="noBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fBe-w6-K9B"/>
                                                 </connections>
                                             </button>
                                         </subviews>
