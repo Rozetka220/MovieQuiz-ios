@@ -4,8 +4,6 @@
 //
 //  Created by Аделия Исхакова on 21.12.2022.
 //
-
-import Foundation
 import UIKit
 
 protocol AlertPresenterProtocol {

@@ -4,15 +4,13 @@
 //
 //  Created by Аделия Исхакова on 17.12.2022.
 //
-
-import Foundation
 import UIKit
 
-class AlertPresenter: AlertPresenterProtocol {
-    internal weak var alertDelegate: UIViewController?
+final class AlertPresenter: AlertPresenterProtocol {
+    weak var alertDelegate: UIViewController?
     
     func presentGameOverAlert(model: AlertModel) {
-        guard let delegateAlert = alertDelegate else {return}
+        guard let alertDelegate = alertDelegate else {return}
         
         let alert = UIAlertController(title: model.title,
                                       message: model.message,
@@ -23,7 +21,7 @@ class AlertPresenter: AlertPresenterProtocol {
         
         alert.addAction(action)
         // показываем всплывающее окно
-        delegateAlert.present(alert, animated: true, completion: nil)
+        alertDelegate.present(alert, animated: true, completion: nil)
     }
 }
     

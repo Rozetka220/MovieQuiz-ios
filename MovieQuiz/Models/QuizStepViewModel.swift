@@ -4,9 +4,6 @@
 //
 //  Created by Аделия Исхакова on 08.12.2022.
 //
-
-import Foundation
-
 import UIKit
 
 /// для состояния "Вопрос задан"
