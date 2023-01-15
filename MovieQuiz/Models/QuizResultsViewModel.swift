@@ -10,6 +10,6 @@ import Foundation
 /// для состояния "Результат квиза"
 struct QuizResultsViewModel {
     let title: String
-    let text: String
+    let text: String //был String
     let buttonText: String
 }

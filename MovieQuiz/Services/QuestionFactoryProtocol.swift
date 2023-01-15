@@ -9,4 +9,5 @@ import Foundation
 ///Ответсвенность протокола - получить  вопрос из хранилища вопросов
 protocol QuestionFactoryProtocol {
     func requestNextQuestion()
+    func loadData()
 }

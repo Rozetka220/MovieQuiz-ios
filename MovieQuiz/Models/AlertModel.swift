@@ -10,7 +10,7 @@ import UIKit
 
 struct AlertModel {
     let title: String
-    let message: String
+    let message: String //был String
     let buttonText: String
     var completion: (UIAlertAction) -> Void
 }
