@@ -40,7 +40,7 @@ override func viewDidLoad() {
     
     // MARK: - QuestionFactoryDelegate
     
-    func viewGameOverAlert(model: AlertModel){}
+    func presentGameOverAlert(model: AlertModel){}
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
@@ -81,7 +81,7 @@ override func viewDidLoad() {
              }
         )
         
-        alertPresenter?.viewGameOverAlert(model: alertModel)
+        alertPresenter?.presentGameOverAlert(model: alertModel)
 
         correctAnswers = 0
     }
@@ -154,7 +154,7 @@ override func viewDidLoad() {
             self.questionFactory?.requestNextQuestion()
         }
         
-        alertPresenter?.viewGameOverAlert(model: model)
+        alertPresenter?.presentGameOverAlert(model: model)
     }
 private func hideLoadingIndicator(){
     activityIndicator.isHidden = true

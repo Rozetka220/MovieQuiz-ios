@@ -11,7 +11,7 @@ import UIKit
 class AlertPresenter: AlertPresenterProtocol {
     internal weak var alertDelegate: UIViewController?
     
-    func viewGameOverAlert(model: AlertModel) {
+    func presentGameOverAlert(model: AlertModel) {
         guard let delegateAlert = alertDelegate else {return}
         
         let alert = UIAlertController(title: model.title,

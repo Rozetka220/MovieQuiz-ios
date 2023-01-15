@@ -11,5 +11,5 @@ import UIKit
 protocol AlertPresenterProtocol {
     //func convertToAlertModel(model: QuizResultsViewModel) -> AlertModel
     var alertDelegate: UIViewController? {get set}
-    func viewGameOverAlert(model: AlertModel)
+    func presentGameOverAlert(model: AlertModel)
 }
