@@ -35,6 +35,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         
         showLoadingIndicator()
         questionFactory?.loadData()
+        
+        presenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -52,14 +54,31 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         }
     }
     
-    @IBAction private func yesBtnPressed(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else { return }
-        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: false) : showAnswerResult(isCorrect: true)
+    /////////////////////
+
+    @IBAction func yesBtnPressed(_ sender: Any) {
+        presenter.currentQuestion = currentQuestion
+        presenter.yesBtnPressed()
     }
-    @IBAction private func noBtnPressed(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else { return }
-        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
+    
+    
+    @IBAction func noBtnPressed(_ sender: Any) {
+        presenter.currentQuestion = currentQuestion
+        presenter.noBtnPressed()
     }
+    ////////////////////
+//    @IBAction private func yesBtnPressed(_ sender: Any) {
+//        presenter.currentQuestion = currentQuestion
+//        presenter.yesBtnPressed()
+////        guard let currentQuestion = presenter.currentQuestion else { return }
+////        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: false) : showAnswerResult(isCorrect: true)
+//    }
+//    @IBAction private func noBtnPressed(_ sender: Any) {
+//        presenter.currentQuestion = currentQuestion
+//        presenter.noBtnPressed()
+////        guard let currentQuestion = presenter.currentQuestion else { return }
+////        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
+//    }
     
     private func show(quiz step: QuizStepViewModel) {
         // здесь мы заполняем нашу картинку, текст и счётчик данными
@@ -85,14 +104,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         correctAnswers = 0
     }
     
-//    private func convert(model: QuizQuestion) -> QuizStepViewModel {
-//        return QuizStepViewModel(
-//            image: UIImage(data: model.image) ?? UIImage(),                //UIImage(named: model.image) ?? UIImage(),
-//            question: model.text,
-//            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-//    }
-    
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         nButton.isEnabled=false
         yButton.isEnabled=false
         imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
