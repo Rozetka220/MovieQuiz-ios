@@ -18,7 +18,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     var questionFactory: QuestionFactoryProtocol?
     
     private let statisticService: StatisticService!
-
+    
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
@@ -55,7 +55,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         //на сколько необходимо создавать отельную переменную givenAnswer? Я как понимаю это просто для читаемости кода
         let givenAnswer = isYes
         
-        currentQuestion.correctAnswer == givenAnswer ? viewController?.showAnswerResult(isCorrect: true) : viewController?.showAnswerResult(isCorrect: false)
+        
+        //tututut
+        currentQuestion.correctAnswer == givenAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
     }
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
@@ -71,41 +73,41 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     
     //Так выглядила моя функция до внедрения makeResultMessage и кажется она вполне себе работает, зачем мне внедрять makeResult?
-//    func showNextQuestionOrResults() {
-//        if self.isLastQuestion() {
-//            statisticService.store(correct: correctAnswers, total: self.questionsAmount)
-//            let text = """
-//            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
-//            Количество сыгранных квизов: \(statisticService.gamesCount)
-//            Рекорд: \(statisticService.bestGame.correct)/\(self.questionsAmount) (\(statisticService.bestGame.date.dateTimeString))
-//            Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
-//            """
-//            let viewModel = QuizResultsViewModel(
-//                title: "Этот раунд окончен!",
-//                text: text,
-//                buttonText: "Сыграть ещё раз")
-//            viewController?.show(quiz: viewModel)
-//
-//        } else {
-//            self.switchToNextQuestion()
-//            questionFactory?.requestNextQuestion()
-//        }
-//    }
+    //    func showNextQuestionOrResults() {
+    //        if self.isLastQuestion() {
+    //            statisticService.store(correct: correctAnswers, total: self.questionsAmount)
+    //            let text = """
+    //            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
+    //            Количество сыгранных квизов: \(statisticService.gamesCount)
+    //            Рекорд: \(statisticService.bestGame.correct)/\(self.questionsAmount) (\(statisticService.bestGame.date.dateTimeString))
+    //            Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
+    //            """
+    //            let viewModel = QuizResultsViewModel(
+    //                title: "Этот раунд окончен!",
+    //                text: text,
+    //                buttonText: "Сыграть ещё раз")
+    //            viewController?.show(quiz: viewModel)
+    //
+    //        } else {
+    //            self.switchToNextQuestion()
+    //            questionFactory?.requestNextQuestion()
+    //        }
+    //    }
     func showNextQuestionOrResults() {
-            if self.isLastQuestion() {
-                statisticService.store(correct: correctAnswers, total: self.questionsAmount)
-                let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
-                let viewModel = QuizResultsViewModel(
-                    title: "Этот раунд окончен!",
-                    text: text,
-                    buttonText: "Сыграть ещё раз")
-                viewController?.show(quiz: viewModel)
-    
-            } else {
-                self.switchToNextQuestion()
-                questionFactory?.requestNextQuestion()
-            }
+        if self.isLastQuestion() {
+            //statisticService.store(correct: correctAnswers, total: self.questionsAmount)
+            let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            viewController?.show(quiz: viewModel)
+            
+        } else {
+            self.switchToNextQuestion()
+            questionFactory?.requestNextQuestion()
         }
+    }
     
     func didAnswer(isCorrectAnswer: Bool) {
         if (isCorrectAnswer) { correctAnswers += 1 }
@@ -124,32 +126,47 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     }
     
     
-    // Я вроде как вполне себе спокойно обхожусь без этого метода, не совсем понимаю, зачем его использовать?
+    // Я вроде как вполне себе могй спокойно обойтись без этого метода, не совсем понимаю, зачем его использовать?
     func makeResultMessage() -> String {
         statisticService.store(correct: correctAnswers, total: questionsAmount)
-
-                let bestGame = statisticService.bestGame
-
-                let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
-                let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
-                let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
-                + " (\(bestGame.date.dateTimeString))"
-                let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
-
-                let resultMessage = [
-                    currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine
-                ].joined(separator: "\n")
-
-                return resultMessage
+        
+        let bestGame = statisticService.bestGame
+        
+        let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+        let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+        let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
+        + " (\(bestGame.date.dateTimeString))"
+        let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+        
+        let resultMessage = [
+            currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine
+        ].joined(separator: "\n")
+        
+        return resultMessage
     }
     
-    
+    func showAnswerResult(isCorrect: Bool) {
+        viewController?.nButton.isEnabled=false
+        viewController?.yButton.isEnabled=false
+        
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // запускаем задачу через 1 секунду
+            guard let self = self else {return}
+            self.viewController?.highlightImageBorderClear()
+            //self.presenter.correctAnswers = self.presenter.correctAnswers
+            //self.presenter.questionFactory = self.questionFactory
+            self.showNextQuestionOrResults()
+            self.viewController?.yButton.isEnabled=true
+            self.viewController?.nButton.isEnabled=true
+        }
+    }
     
     init(viewController: MovieQuizViewController) {
-            self.viewController = viewController
-            statisticService = StatisticServiceImplementation()
-            questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
-            questionFactory?.loadData()
-            viewController.showLoadingIndicator()
+        self.viewController = viewController
+        statisticService = StatisticServiceImplementation()
+        questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        questionFactory?.loadData()
+        viewController.showLoadingIndicator()
     }
 }

@@ -67,7 +67,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     func averageAccuracy(correct count: Int, total amount: Int) {
         if (gamesCount == 0) {
-            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100)
+            totalAccuracy = totalAccuracy + Double(count) / Double(amount) * 100
         } else {
             totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
         }

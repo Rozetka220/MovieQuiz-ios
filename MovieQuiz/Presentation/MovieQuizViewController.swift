@@ -23,7 +23,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
     //private var serviceStatictic: StatisticService = StatisticServiceImplementation()
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +51,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
-            message: presenter.makeResultMessage(),
+            message:  presenter.makeResultMessage(), // result.text,
             buttonText: result.buttonText, //maybe empty, ="Сыграть еще!"
             completion: { [weak self] _ in
                 guard let self = self else {return}
@@ -63,29 +63,40 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
         alertPresenter?.presentGameOverAlert(model: alertModel, identifier: "gameOverAlertId")
     }
     
-    func showAnswerResult(isCorrect: Bool) {
-        nButton.isEnabled=false
-        yButton.isEnabled=false
-        imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
+    //    func showAnswerResult(isCorrect: Bool) {
+    //        nButton.isEnabled=false
+    //        yButton.isEnabled=false
+    //        imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
+    //        imageView.layer.borderWidth = 8
+    //
+    //        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // запускаем задачу через 1 секунду
+    //            guard let self = self else {return}
+    //            self.imageView.layer.borderColor = UIColor.clear.cgColor
+    //            self.presenter.correctAnswers = self.presenter.correctAnswers
+    //            //self.presenter.questionFactory = self.questionFactory
+    //            self.presenter.showNextQuestionOrResults()
+    //            self.yButton.isEnabled=true
+    //            self.nButton.isEnabled=true
+    //        }
+    //    }
+    
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+        imageView.layer.borderColor = UIColor.clear.cgColor
+        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        if isCorrect == true {
+        if isCorrectAnswer == true {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
-            presenter.didAnswer(isCorrectAnswer: isCorrect) //tut
+            presenter.didAnswer(isCorrectAnswer: isCorrectAnswer) //tut
             
         } else {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // запускаем задачу через 1 секунду
-            guard let self = self else {return}
-            self.imageView.layer.borderColor = UIColor.clear.cgColor
-            self.presenter.correctAnswers = self.presenter.correctAnswers
-            //self.presenter.questionFactory = self.questionFactory
-            self.presenter.showNextQuestionOrResults()
-            self.yButton.isEnabled=true
-            self.nButton.isEnabled=true
-        }
+        
     }
     
+    func highlightImageBorderClear(){
+        imageView.layer.borderColor = UIColor.clear.cgColor
+    }
     //Блок работы с сетью
     func showLoadingIndicator(){
         activityIndicator.isHidden = false
