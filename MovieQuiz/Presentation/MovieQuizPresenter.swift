@@ -29,8 +29,9 @@ final class MovieQuizPresenter{
         return currentQuestionIndex == questionsAmount - 1
     }
     
-    func resetQuestuinIndex() {
+    func restartGame() {
         currentQuestionIndex = 0
+        correctAnswers = 0
     }
     
     func switchToNextQuestion() {
@@ -85,5 +86,9 @@ final class MovieQuizPresenter{
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
+    }
+    
+    func didAnswer(isCorrectAnswer: Bool) {
+        if (isCorrectAnswer) { correctAnswers += 1 }
     }
 }
