@@ -22,27 +22,17 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     //private var questionFactory: QuestionFactoryProtocol?
     
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
-    private var serviceStatictic: StatisticService = StatisticServiceImplementation()
+    //private var serviceStatictic: StatisticService = StatisticServiceImplementation()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         alertPresenter?.alertDelegate = self
-        //questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
-        //questionFactory?.requestNextQuestion()
-        
-        //showLoadingIndicator()
-        //questionFactory?.loadData()
-        
         presenter = MovieQuizPresenter(viewController: self)
     }
     
     func presentGameOverAlert(model: AlertModel, identifier: String){}
     
-//    func didRecieveNextQuestion(question: QuizQuestion?) {
-//        presenter.didRecieveNextQuestion(question: question)
-//    }
-
     @IBAction func yesBtnPressed(_ sender: Any) {
         presenter.yesBtnPressed()
     }
@@ -61,7 +51,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
-            message: result.text,
+            message: presenter.makeResultMessage(),
             buttonText: result.buttonText, //maybe empty, ="Сыграть еще!"
             completion: { [weak self] _ in
                 guard let self = self else {return}
@@ -122,13 +112,5 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     func hideLoadingIndicator(){
         activityIndicator.isHidden = true
     }
-//    func didLoadDataFromServer() {
-//        activityIndicator.isHidden = true
-//        questionFactory?.requestNextQuestion()
-//    }
-//
-//    func didFailToLoadData(with error: Error) {
-//        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
-//    }
 }
 

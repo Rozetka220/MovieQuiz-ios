@@ -16,8 +16,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     var correctAnswers: Int = 0
     var questionFactory: QuestionFactoryProtocol?
-    let serviceStatictic: StatisticService = StatisticServiceImplementation()
     
+    private let statisticService: StatisticService!
+
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
@@ -68,26 +69,43 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         }
     }
     
+    
+    //Так выглядила моя функция до внедрения makeResultMessage и кажется она вполне себе работает, зачем мне внедрять makeResult?
+//    func showNextQuestionOrResults() {
+//        if self.isLastQuestion() {
+//            statisticService.store(correct: correctAnswers, total: self.questionsAmount)
+//            let text = """
+//            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
+//            Количество сыгранных квизов: \(statisticService.gamesCount)
+//            Рекорд: \(statisticService.bestGame.correct)/\(self.questionsAmount) (\(statisticService.bestGame.date.dateTimeString))
+//            Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
+//            """
+//            let viewModel = QuizResultsViewModel(
+//                title: "Этот раунд окончен!",
+//                text: text,
+//                buttonText: "Сыграть ещё раз")
+//            viewController?.show(quiz: viewModel)
+//
+//        } else {
+//            self.switchToNextQuestion()
+//            questionFactory?.requestNextQuestion()
+//        }
+//    }
     func showNextQuestionOrResults() {
-        if self.isLastQuestion() {
-            serviceStatictic.store(correct: correctAnswers, total: self.questionsAmount)
-            let text = """
-            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
-            Количество сыгранных квизов: \(serviceStatictic.gamesCount)
-            Рекорд: \(serviceStatictic.bestGame.correct)/\(self.questionsAmount) (\(serviceStatictic.bestGame.date.dateTimeString))
-            Средняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%
-            """
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            viewController?.show(quiz: viewModel)
-            
-        } else {
-            self.switchToNextQuestion()
-            questionFactory?.requestNextQuestion()
+            if self.isLastQuestion() {
+                statisticService.store(correct: correctAnswers, total: self.questionsAmount)
+                let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
+                let viewModel = QuizResultsViewModel(
+                    title: "Этот раунд окончен!",
+                    text: text,
+                    buttonText: "Сыграть ещё раз")
+                viewController?.show(quiz: viewModel)
+    
+            } else {
+                self.switchToNextQuestion()
+                questionFactory?.requestNextQuestion()
+            }
         }
-    }
     
     func didAnswer(isCorrectAnswer: Bool) {
         if (isCorrectAnswer) { correctAnswers += 1 }
@@ -106,10 +124,30 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     }
     
     
+    // Я вроде как вполне себе спокойно обхожусь без этого метода, не совсем понимаю, зачем его использовать?
+    func makeResultMessage() -> String {
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
+
+                let bestGame = statisticService.bestGame
+
+                let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+                let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+                let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
+                + " (\(bestGame.date.dateTimeString))"
+                let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
+
+                let resultMessage = [
+                    currentGameResultLine, totalPlaysCountLine, bestGameInfoLine, averageAccuracyLine
+                ].joined(separator: "\n")
+
+                return resultMessage
+    }
+    
+    
     
     init(viewController: MovieQuizViewController) {
             self.viewController = viewController
-            
+            statisticService = StatisticServiceImplementation()
             questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
             questionFactory?.loadData()
             viewController.showLoadingIndicator()
