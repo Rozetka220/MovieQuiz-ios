@@ -66,8 +66,37 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     func testAlert() throws {
-        let alert = app.alerts.
-        print(alert)
+        let alert = app.alerts["gameOverAlertId"]
+        
+        for _ in 0...9 {
+            app.buttons["No"].tap()
+            sleep(2)
+        }
+        
+        sleep(3)
+        XCTAssertTrue(alert.exists)
+        XCTAssertEqual(alert.label, "Этот раунд окончен!")
+        XCTAssertEqual(alert.buttons.firstMatch.label, "Сыграть ещё раз")
+    }
+    
+    func testAlertDismiss() throws {
+        let alert = app.alerts["gameOverAlertId"]
+        
+        for _ in 0...9 {
+            app.buttons["No"].tap()
+            sleep(2)
+        }
+        
+        sleep(2)
+        
+        alert.buttons.firstMatch.tap()
+        
+        sleep(3)
+        
+        let indexLabel = app.staticTexts["Index"]
+        
+        XCTAssertFalse(alert.exists)
+        XCTAssertTrue(indexLabel.label == "1/10")
     }
     func testExample() throws {
         let app = XCUIApplication()

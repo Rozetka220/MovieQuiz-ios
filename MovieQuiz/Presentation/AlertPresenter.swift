@@ -9,7 +9,7 @@ import UIKit
 final class AlertPresenter: AlertPresenterProtocol {
     weak var alertDelegate: UIViewController?
     
-    func presentGameOverAlert(model: AlertModel) {
+    func presentGameOverAlert(model: AlertModel, identifier: String) {
         guard let alertDelegate = alertDelegate else {return}
         
         let alert = UIAlertController(title: model.title,
@@ -20,6 +20,7 @@ final class AlertPresenter: AlertPresenterProtocol {
         let action = UIAlertAction(title: model.buttonText, style: .default, handler: model.completion)
         
         alert.addAction(action)
+        alert.view.accessibilityIdentifier = identifier
         // показываем всплывающее окно
         alertDelegate.present(alert, animated: true, completion: nil)
     }
