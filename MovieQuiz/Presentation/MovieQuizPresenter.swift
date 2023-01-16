@@ -35,12 +35,19 @@ final class MovieQuizPresenter{
     
     
     func yesBtnPressed() {
-        guard let currentQuestion = currentQuestion else { return }
-        currentQuestion.correctAnswer ? viewController?.showAnswerResult(isCorrect: true) : viewController?.showAnswerResult(isCorrect: false)
+        didAnswer(isYes: true)
     }
     
     func noBtnPressed() {
-        guard let currentQuestion = currentQuestion else { return }
-        currentQuestion.correctAnswer ? viewController?.showAnswerResult(isCorrect: false) : viewController?.showAnswerResult(isCorrect: true)
+        didAnswer(isYes: false)
+    }
+    
+    private func didAnswer(isYes: Bool) {
+        guard let currentQuestion = currentQuestion else {return}
+        
+        //на сколько необходимо создавать отельную переменную givenAnswer? Я как понимаю это просто для читаемости кода
+        let givenAnswer = isYes
+        
+        currentQuestion.correctAnswer == givenAnswer ? viewController?.showAnswerResult(isCorrect: true) : viewController?.showAnswerResult(isCorrect: false)
     }
 }
