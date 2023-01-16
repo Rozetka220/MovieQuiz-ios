@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, AlertPresenterProtocol {
+final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     
     var alertDelegate: UIViewController?
     
@@ -18,8 +18,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     @IBOutlet weak var yButton: UIButton!
     
-    private let presenter = MovieQuizPresenter()
-    private var questionFactory: QuestionFactoryProtocol?
+    private var presenter: MovieQuizPresenter!
+    //private var questionFactory: QuestionFactoryProtocol?
     
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
     private var serviceStatictic: StatisticService = StatisticServiceImplementation()
@@ -28,22 +28,20 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         alertPresenter?.alertDelegate = self
-        questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
-        questionFactory?.requestNextQuestion()
+        //questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        //questionFactory?.requestNextQuestion()
         
-        showLoadingIndicator()
-        questionFactory?.loadData()
+        //showLoadingIndicator()
+        //questionFactory?.loadData()
         
-        presenter.viewController = self
+        presenter = MovieQuizPresenter(viewController: self)
     }
-    
-    // MARK: - QuestionFactoryDelegate
     
     func presentGameOverAlert(model: AlertModel, identifier: String){}
     
-    func didRecieveNextQuestion(question: QuizQuestion?) {
-        presenter.didRecieveNextQuestion(question: question)
-    }
+//    func didRecieveNextQuestion(question: QuizQuestion?) {
+//        presenter.didRecieveNextQuestion(question: question)
+//    }
 
     @IBAction func yesBtnPressed(_ sender: Any) {
         presenter.yesBtnPressed()
@@ -68,7 +66,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             completion: { [weak self] _ in
                 guard let self = self else {return}
                 self.presenter.restartGame()
-                self.questionFactory?.requestNextQuestion()
+                //self.questionFactory?.requestNextQuestion()
             }
         )
         
@@ -91,7 +89,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             guard let self = self else {return}
             self.imageView.layer.borderColor = UIColor.clear.cgColor
             self.presenter.correctAnswers = self.presenter.correctAnswers
-            self.presenter.questionFactory = self.questionFactory
+            //self.presenter.questionFactory = self.questionFactory
             self.presenter.showNextQuestionOrResults()
             self.yButton.isEnabled=true
             self.nButton.isEnabled=true
@@ -99,12 +97,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     }
     
     //Блок работы с сетью
-    private func showLoadingIndicator(){
+    func showLoadingIndicator(){
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
-    private func showNetworkError(message: String){
+    func showNetworkError(message: String){
         hideLoadingIndicator()
         
         let model = AlertModel(title: "Ошибка",
@@ -115,21 +113,22 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
             self.presenter.restartGame() //tut
             self.presenter.didAnswer(isCorrectAnswer: true)
             
-            self.questionFactory?.requestNextQuestion()
+            //self.questionFactory?.requestNextQuestion()
         }
         
         alertPresenter?.presentGameOverAlert(model: model, identifier: "netErrorAlertId")
     }
-    private func hideLoadingIndicator(){
-        activityIndicator.isHidden = true
-    }
-    func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
-        questionFactory?.requestNextQuestion()
-    }
     
-    func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
+    func hideLoadingIndicator(){
+        activityIndicator.isHidden = true
     }
+//    func didLoadDataFromServer() {
+//        activityIndicator.isHidden = true
+//        questionFactory?.requestNextQuestion()
+//    }
+//
+//    func didFailToLoadData(with error: Error) {
+//        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
+//    }
 }
 

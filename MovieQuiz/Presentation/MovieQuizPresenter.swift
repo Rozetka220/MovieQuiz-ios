@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MovieQuizPresenter{
+final class MovieQuizPresenter: QuestionFactoryDelegate{
     let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     
@@ -32,6 +32,7 @@ final class MovieQuizPresenter{
     func restartGame() {
         currentQuestionIndex = 0
         correctAnswers = 0
+        questionFactory?.requestNextQuestion()
     }
     
     func switchToNextQuestion() {
@@ -90,5 +91,27 @@ final class MovieQuizPresenter{
     
     func didAnswer(isCorrectAnswer: Bool) {
         if (isCorrectAnswer) { correctAnswers += 1 }
+    }
+    
+    // MARK: - QuestionFactoryDelegate
+    
+    func didLoadDataFromServer() {
+        viewController?.hideLoadingIndicator()
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        let message = error.localizedDescription
+        viewController?.showNetworkError(message: message)
+    }
+    
+    
+    
+    init(viewController: MovieQuizViewController) {
+            self.viewController = viewController
+            
+            questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+            questionFactory?.loadData()
+            viewController.showLoadingIndicator()
     }
 }
