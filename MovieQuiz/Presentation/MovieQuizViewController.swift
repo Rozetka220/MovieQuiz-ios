@@ -20,7 +20,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     private let presenter = MovieQuizPresenter()
     private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion?
+    //private var currentQuestion: QuizQuestion?
     
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
     private var serviceStatictic: StatisticService = StatisticServiceImplementation()
@@ -44,43 +44,28 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     func presentGameOverAlert(model: AlertModel, identifier: String){}
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        currentQuestion = question
-        let viewModel = presenter.convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
+        presenter.didRecieveNextQuestion(question: question)
+//        guard let question = question else {
+//            return
+//        }
+//        currentQuestion = question
+//        let viewModel = presenter.convert(model: question)
+//        DispatchQueue.main.async { [weak self] in
+//            self?.show(quiz: viewModel)
+//        }
     }
-    
-    /////////////////////
 
     @IBAction func yesBtnPressed(_ sender: Any) {
-        presenter.currentQuestion = currentQuestion
+        //presenter.currentQuestion = currentQuestion
         presenter.yesBtnPressed()
     }
     
-    
     @IBAction func noBtnPressed(_ sender: Any) {
-        presenter.currentQuestion = currentQuestion
+        //presenter.currentQuestion = currentQuestion
         presenter.noBtnPressed()
     }
-    ////////////////////
-//    @IBAction private func yesBtnPressed(_ sender: Any) {
-//        presenter.currentQuestion = currentQuestion
-//        presenter.yesBtnPressed()
-////        guard let currentQuestion = presenter.currentQuestion else { return }
-////        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: false) : showAnswerResult(isCorrect: true)
-//    }
-//    @IBAction private func noBtnPressed(_ sender: Any) {
-//        presenter.currentQuestion = currentQuestion
-//        presenter.noBtnPressed()
-////        guard let currentQuestion = presenter.currentQuestion else { return }
-////        currentQuestion.correctAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
-//    }
     
-    private func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) {
         // здесь мы заполняем нашу картинку, текст и счётчик данными
         imageView.image = step.image
         counterLabel.text = step.questionNumber
