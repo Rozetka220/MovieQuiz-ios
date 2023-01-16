@@ -7,15 +7,31 @@
 
 import UIKit
 
+protocol MovieQuizViewControllerProtocol: AnyObject {
+    func show(quiz step: QuizStepViewModel)
+    func show(quiz result: QuizResultsViewModel)
+    
+    func highlightImageBorder(isCorrectAnswer: Bool)
+    
+    func showLoadingIndicator()
+    func hideLoadingIndicator()
+    
+    func showNetworkError(message: String)
+    
+    func buttonDisable(isDisable: Bool)
+    
+    func highlightImageBorderClear()
+}
+
 final class MovieQuizPresenter: QuestionFactoryDelegate{
-    let questionsAmount: Int = 10
+    private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     
-    var currentQuestion: QuizQuestion?
-    weak var viewController: MovieQuizViewController?
+    private var currentQuestion: QuizQuestion?
+    private weak var viewController: MovieQuizViewControllerProtocol?
     
-    var correctAnswers: Int = 0
-    var questionFactory: QuestionFactoryProtocol?
+    private var correctAnswers: Int = 0
+    private var questionFactory: QuestionFactoryProtocol?
     
     private let statisticService: StatisticService!
     
@@ -93,7 +109,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     //            questionFactory?.requestNextQuestion()
     //        }
     //    }
-    func showNextQuestionOrResults() {
+    private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             //statisticService.store(correct: correctAnswers, total: self.questionsAmount)
             let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
@@ -145,9 +161,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         return resultMessage
     }
     
-    func showAnswerResult(isCorrect: Bool) {
-        viewController?.nButton.isEnabled=false
-        viewController?.yButton.isEnabled=false
+    private func showAnswerResult(isCorrect: Bool) {
+        viewController?.buttonDisable(isDisable: false)
         
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         
@@ -157,12 +172,11 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
             //self.presenter.correctAnswers = self.presenter.correctAnswers
             //self.presenter.questionFactory = self.questionFactory
             self.showNextQuestionOrResults()
-            self.viewController?.yButton.isEnabled=true
-            self.viewController?.nButton.isEnabled=true
+            self.viewController?.buttonDisable(isDisable: true)
         }
     }
     
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         statisticService = StatisticServiceImplementation()
         questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())

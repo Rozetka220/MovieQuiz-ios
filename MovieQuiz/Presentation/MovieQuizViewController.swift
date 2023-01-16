@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
+final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, MovieQuizViewControllerProtocol {
     
     var alertDelegate: UIViewController?
     
@@ -12,11 +12,11 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     @IBOutlet weak private var counterLabel: UILabel!
     @IBOutlet weak private var textLabel: UILabel!
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak private var activityIndicator: UIActivityIndicatorView!
     
-    @IBOutlet weak var nButton: UIButton!
+    @IBOutlet weak private var nButton: UIButton!
     
-    @IBOutlet weak var yButton: UIButton!
+    @IBOutlet weak private var yButton: UIButton!
     
     private var presenter: MovieQuizPresenter!
     //private var questionFactory: QuestionFactoryProtocol?
@@ -33,11 +33,11 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     
     func presentGameOverAlert(model: AlertModel, identifier: String){}
     
-    @IBAction func yesBtnPressed(_ sender: Any) {
+    @IBAction private func yesBtnPressed(_ sender: Any) {
         presenter.yesBtnPressed()
     }
     
-    @IBAction func noBtnPressed(_ sender: Any) {
+    @IBAction private func noBtnPressed(_ sender: Any) {
         presenter.noBtnPressed()
     }
     
@@ -122,6 +122,16 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol {
     
     func hideLoadingIndicator(){
         activityIndicator.isHidden = true
+    }
+    
+    func buttonDisable(isDisable: Bool){
+        if (isDisable){
+            nButton.isEnabled=true
+            yButton.isEnabled=true
+        } else {
+            nButton.isEnabled=false
+            yButton.isEnabled=false
+        }
     }
 }
 
