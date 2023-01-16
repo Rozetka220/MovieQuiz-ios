@@ -20,7 +20,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     private let presenter = MovieQuizPresenter()
     private var questionFactory: QuestionFactoryProtocol?
-    //private var currentQuestion: QuizQuestion?
     
     private var alertPresenter: AlertPresenterProtocol? = AlertPresenter()
     private var serviceStatictic: StatisticService = StatisticServiceImplementation()
@@ -45,14 +44,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
         presenter.didRecieveNextQuestion(question: question)
-//        guard let question = question else {
-//            return
-//        }
-//        currentQuestion = question
-//        let viewModel = presenter.convert(model: question)
-//        DispatchQueue.main.async { [weak self] in
-//            self?.show(quiz: viewModel)
-//        }
     }
 
     @IBAction func yesBtnPressed(_ sender: Any) {
@@ -72,7 +63,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         textLabel.text = step.question
     }
     
-    private func show(quiz result: QuizResultsViewModel) {
+    func show(quiz result: QuizResultsViewModel) {
         let alertModel = AlertModel(
             title: result.title,
             message: result.text,
@@ -104,32 +95,34 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate, 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // запускаем задачу через 1 секунду
             guard let self = self else {return}
             self.imageView.layer.borderColor = UIColor.clear.cgColor
-            self.showNextQuestionOrResults()
+            self.presenter.correctAnswers = self.correctAnswers
+            self.presenter.questionFactory = self.questionFactory
+            self.presenter.showNextQuestionOrResults()
             self.yButton.isEnabled=true
             self.nButton.isEnabled=true
         }
     }
     
-    private func showNextQuestionOrResults() {
-        if presenter.isLastQuestion() {
-            serviceStatictic.store(correct: correctAnswers, total: presenter.questionsAmount)
-            let text = """
-            Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)
-            Количество сыгранных квизов: \(serviceStatictic.gamesCount)
-            Рекорд: \(serviceStatictic.bestGame.correct)/\(presenter.questionsAmount) (\(serviceStatictic.bestGame.date.dateTimeString))
-            Средняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%
-            """
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel)
-            
-        } else {
-            presenter.switchToNextQuestion()
-            questionFactory?.requestNextQuestion()
-        }
-    }
+//    private func showNextQuestionOrResults() {
+//        if presenter.isLastQuestion() {
+//            serviceStatictic.store(correct: correctAnswers, total: presenter.questionsAmount)
+//            let text = """
+//            Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)
+//            Количество сыгранных квизов: \(serviceStatictic.gamesCount)
+//            Рекорд: \(serviceStatictic.bestGame.correct)/\(presenter.questionsAmount) (\(serviceStatictic.bestGame.date.dateTimeString))
+//            Средняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%
+//            """
+//            let viewModel = QuizResultsViewModel(
+//                title: "Этот раунд окончен!",
+//                text: text,
+//                buttonText: "Сыграть ещё раз")
+//            show(quiz: viewModel)
+//
+//        } else {
+//            presenter.switchToNextQuestion()
+//            questionFactory?.requestNextQuestion()
+//        }
+//    }
     //Блок работы с сетью
     private func showLoadingIndicator(){
         activityIndicator.isHidden = false

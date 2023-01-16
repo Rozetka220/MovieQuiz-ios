@@ -14,6 +14,10 @@ final class MovieQuizPresenter{
     var currentQuestion: QuizQuestion?
     weak var viewController: MovieQuizViewController?
     
+    var correctAnswers: Int = 0
+    var questionFactory: QuestionFactoryProtocol?
+    let serviceStatictic: StatisticService = StatisticServiceImplementation()
+    
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
@@ -59,6 +63,27 @@ final class MovieQuizPresenter{
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
             self?.viewController?.show(quiz: viewModel)
+        }
+    }
+    
+    func showNextQuestionOrResults() {
+        if self.isLastQuestion() {
+            serviceStatictic.store(correct: correctAnswers, total: self.questionsAmount)
+            let text = """
+            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
+            Количество сыгранных квизов: \(serviceStatictic.gamesCount)
+            Рекорд: \(serviceStatictic.bestGame.correct)/\(self.questionsAmount) (\(serviceStatictic.bestGame.date.dateTimeString))
+            Средняя точность: \(String(format: "%.2f", serviceStatictic.totalAccuracy))%
+            """
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            viewController?.show(quiz: viewModel)
+            
+        } else {
+            self.switchToNextQuestion()
+            questionFactory?.requestNextQuestion()
         }
     }
 }
