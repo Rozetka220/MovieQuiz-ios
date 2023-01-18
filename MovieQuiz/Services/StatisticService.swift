@@ -54,7 +54,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     func store(correct count: Int, total amount: Int) {
-        //refresh()
+        refresh()
         var newBestGame = GameRecord(correct: count, total: amount, date: Date())
         gamesCount += 1
         if newBestGame > bestGame {

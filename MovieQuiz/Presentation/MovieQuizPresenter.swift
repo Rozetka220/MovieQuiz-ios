@@ -35,6 +35,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     private let statisticService: StatisticService
     
+    init(viewController: MovieQuizViewControllerProtocol) {
+        self.viewController = viewController
+        statisticService = StatisticServiceImplementation()
+        questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
+        questionFactory?.loadData()
+        viewController.showLoadingIndicator()
+    }
+    
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
@@ -142,13 +150,5 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
             self.showNextQuestionOrResults()
             self.viewController?.setButtonDisable(isDisable: true)
         }
-    }
-    
-    init(viewController: MovieQuizViewControllerProtocol) {
-        self.viewController = viewController
-        statisticService = StatisticServiceImplementation()
-        questionFactory = QuestionFactory(delegate: self, moviesLoader: MoviesLoader())
-        questionFactory?.loadData()
-        viewController.showLoadingIndicator()
     }
 }
