@@ -33,7 +33,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     private var correctAnswers: Int = 0
     private var questionFactory: QuestionFactoryProtocol?
     
-    private let statisticService: StatisticService!
+    private let statisticService: StatisticService
     
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         return QuizStepViewModel(
