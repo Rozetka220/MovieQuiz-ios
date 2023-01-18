@@ -96,7 +96,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             let alertModel = AlertModel(
-                title: "Ваш результат: \(correctAnswers)/\(self.questionsAmount)",
+                title: "Этот раунд окончен!",
                 message:  makeResultMessage(), // result.text,
                 buttonText: "Сыграть ещё раз",
                 completion: { [weak self] _ in
