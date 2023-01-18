@@ -65,9 +65,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         didAnswer(isYes: false)
     }
     
-    private func didAnswer(isYes: Bool) {
+    private func didAnswer(isYes givenAnswer: Bool) {
         guard let currentQuestion = currentQuestion else {return}
-        let givenAnswer = isYes
         currentQuestion.correctAnswer == givenAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
     }
     

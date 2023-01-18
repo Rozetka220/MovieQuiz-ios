@@ -64,20 +64,15 @@ final class StatisticServiceImplementation: StatisticService {
         if newBestGame > bestGame {
             bestGame = newBestGame
         }
-        totalAccuracy+=Double(count)
+        //totalAccuracy+=Double(count)
         averageAccuracy(correct: count, total: amount)
     }
     func averageAccuracy(correct count: Int, total amount: Int) {
         if (gamesCount == 0) {
-              totalAccuracy = totalAccuracy + Double(count) / Double(amount) * 100
-          } else {
-              totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
-          }
-//        if (gamesCount == 0) {
-//            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100)
-//        } else {
-//            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
-//        }
+            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100)
+        } else {
+            totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
+        }
     }
     
     func refresh(){
