@@ -54,7 +54,6 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     func store(correct count: Int, total amount: Int) {
-        refresh()
         var newBestGame = GameRecord(correct: count, total: amount, date: Date())
         gamesCount += 1
         if newBestGame > bestGame {
@@ -68,13 +67,5 @@ final class StatisticServiceImplementation: StatisticService {
         } else {
             totalAccuracy = (totalAccuracy + Double(count) / Double(amount) * 100) / Double(gamesCount)
         }
-    }
-    
-    func refresh(){
-        userDefaults.set(0, forKey: Keys.total.rawValue)
-
-        userDefaults.set(0, forKey: Keys.gamesCount.rawValue)
-
-        userDefaults.set(0, forKey: Keys.bestGame.rawValue)
     }
 }

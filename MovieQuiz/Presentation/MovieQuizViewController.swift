@@ -24,6 +24,8 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        var path = print(NSHomeDirectory())
+        print(path)
         alertPresenter?.alertDelegate = self
         presenter = MovieQuizPresenter(viewController: self)
     }
@@ -50,7 +52,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
         let alertModel = AlertModel(
             title: result.title,
             message:  presenter.makeResultMessage(), // result.text,
-            buttonText: result.buttonText, //maybe empty, ="Сыграть еще!"
+            buttonText: result.buttonText,
             completion: { [weak self] _ in
                 guard let self = self else {return}
                 self.presenter.restartGame()
