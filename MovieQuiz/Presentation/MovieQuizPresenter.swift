@@ -67,7 +67,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     private func didAnswer(isYes givenAnswer: Bool) {
         guard let currentQuestion = currentQuestion else {return}
-        currentQuestion.correctAnswer == givenAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
+        currentQuestion.correctAnswer == givenAnswer ? showAnswerResult(isCorrect: givenAnswer) : showAnswerResult(isCorrect: givenAnswer)
     }
     
     func didRecieveNextQuestion(question: QuizQuestion?) {
@@ -83,7 +83,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
-            //statisticService.store(correct: correctAnswers, total: self.questionsAmount)
             let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
@@ -113,11 +112,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         viewController?.showNetworkError(message: message)
     }
     
-    
-    // Я вроде как вполне себе могй спокойно обойтись без этого метода, не совсем понимаю, зачем его использовать?
-    func makeResultMessage() -> String {
+    func saveStatistic(){
         statisticService.store(correct: correctAnswers, total: questionsAmount)
-        
+    }
+    func makeResultMessage() -> String {
         let bestGame = statisticService.bestGame
         
         let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"

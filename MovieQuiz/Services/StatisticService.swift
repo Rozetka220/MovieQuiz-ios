@@ -16,11 +16,7 @@ protocol StatisticService {
 }
 
 
-final class StatisticServiceImplementation: StatisticService {
-    //var totalAccuracy: Double = 0.0
-    
-    //var gamesCount: Int = 0
-    
+final class StatisticServiceImplementation: StatisticService {    
     private let userDefaults = UserDefaults.standard
     
     private enum Keys: String {
@@ -58,13 +54,12 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     func store(correct count: Int, total amount: Int) {
-        refresh()
+        //refresh()
         var newBestGame = GameRecord(correct: count, total: amount, date: Date())
         gamesCount += 1
         if newBestGame > bestGame {
             bestGame = newBestGame
         }
-        //totalAccuracy+=Double(count)
         averageAccuracy(correct: count, total: amount)
     }
     func averageAccuracy(correct count: Int, total amount: Int) {

@@ -46,6 +46,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
     }
     
     func show(quiz result: QuizResultsViewModel) {
+        presenter.saveStatistic()
         let alertModel = AlertModel(
             title: result.title,
             message:  presenter.makeResultMessage(), // result.text,
@@ -53,7 +54,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
             completion: { [weak self] _ in
                 guard let self = self else {return}
                 self.presenter.restartGame()
-                //self.questionFactory?.requestNextQuestion()
             }
         )
         
