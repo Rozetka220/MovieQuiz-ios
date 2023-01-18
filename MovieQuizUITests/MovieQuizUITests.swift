@@ -28,7 +28,6 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     func testScreenCast() throws {
-       // XCUIApplication().windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element(boundBy: 2).tap()
         XCUIApplication()/*@START_MENU_TOKEN@*/.staticTexts["Нет"]/*[[".buttons[\"Нет\"].staticTexts[\"Нет\"]",".buttons[\"No\"].staticTexts[\"Нет\"]",".staticTexts[\"Нет\"]"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
                 
     }
@@ -102,16 +101,4 @@ final class MovieQuizUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
     }
-
-    
-    /*
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
-    }
-     */
 }

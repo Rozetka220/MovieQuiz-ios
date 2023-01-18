@@ -18,7 +18,7 @@ protocol MovieQuizViewControllerProtocol: AnyObject {
     
     func showNetworkError(message: String)
     
-    func buttonDisable(isDisable: Bool)
+    func setButtonDisable(isDisable: Bool)
     
     func highlightImageBorderClear()
 }
@@ -67,12 +67,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     private func didAnswer(isYes: Bool) {
         guard let currentQuestion = currentQuestion else {return}
-        
-        //на сколько необходимо создавать отельную переменную givenAnswer? Я как понимаю это просто для читаемости кода
         let givenAnswer = isYes
-        
-        
-        //tututut
         currentQuestion.correctAnswer == givenAnswer ? showAnswerResult(isCorrect: true) : showAnswerResult(isCorrect: false)
     }
     
@@ -87,28 +82,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
         }
     }
     
-    
-    //Так выглядила моя функция до внедрения makeResultMessage и кажется она вполне себе работает, зачем мне внедрять makeResult?
-    //    func showNextQuestionOrResults() {
-    //        if self.isLastQuestion() {
-    //            statisticService.store(correct: correctAnswers, total: self.questionsAmount)
-    //            let text = """
-    //            Ваш результат: \(correctAnswers)/\(self.questionsAmount)
-    //            Количество сыгранных квизов: \(statisticService.gamesCount)
-    //            Рекорд: \(statisticService.bestGame.correct)/\(self.questionsAmount) (\(statisticService.bestGame.date.dateTimeString))
-    //            Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%
-    //            """
-    //            let viewModel = QuizResultsViewModel(
-    //                title: "Этот раунд окончен!",
-    //                text: text,
-    //                buttonText: "Сыграть ещё раз")
-    //            viewController?.show(quiz: viewModel)
-    //
-    //        } else {
-    //            self.switchToNextQuestion()
-    //            questionFactory?.requestNextQuestion()
-    //        }
-    //    }
     private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             //statisticService.store(correct: correctAnswers, total: self.questionsAmount)
@@ -162,17 +135,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     }
     
     private func showAnswerResult(isCorrect: Bool) {
-        viewController?.buttonDisable(isDisable: false)
+        viewController?.setButtonDisable(isDisable: false)
         
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // запускаем задачу через 1 секунду
             guard let self = self else {return}
             self.viewController?.highlightImageBorderClear()
-            //self.presenter.correctAnswers = self.presenter.correctAnswers
-            //self.presenter.questionFactory = self.questionFactory
             self.showNextQuestionOrResults()
-            self.viewController?.buttonDisable(isDisable: true)
+            self.viewController?.setButtonDisable(isDisable: true)
         }
     }
     
