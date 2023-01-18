@@ -9,7 +9,7 @@ import UIKit
 
 protocol MovieQuizViewControllerProtocol: AnyObject {
     func show(quiz step: QuizStepViewModel)
-    func show(quiz result: QuizResultsViewModel)
+    func show(quiz result: AlertModel)
     
     func highlightImageBorder(isCorrectAnswer: Bool)
     
@@ -51,6 +51,10 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     }
     
     func isLastQuestion() ->Bool {
+        if(currentQuestionIndex == questionsAmount - 1){
+            saveStatistic()
+            return currentQuestionIndex == questionsAmount - 1
+        }
         return currentQuestionIndex == questionsAmount - 1
     }
     
@@ -91,13 +95,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate{
     
     private func showNextQuestionOrResults() {
         if self.isLastQuestion() {
-            let text = "Ваш результат: \(correctAnswers)/\(self.questionsAmount)"
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            viewController?.show(quiz: viewModel)
-            
+            let alertModel = AlertModel(
+                title: "Ваш результат: \(correctAnswers)/\(self.questionsAmount)",
+                message:  makeResultMessage(), // result.text,
+                buttonText: "Сыграть ещё раз",
+                completion: { [weak self] _ in
+                    guard let self = self else {return}
+                    self.restartGame()
+                })
+            viewController?.show(quiz: alertModel)
         } else {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()

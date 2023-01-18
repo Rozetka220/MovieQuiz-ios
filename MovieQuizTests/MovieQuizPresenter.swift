@@ -11,6 +11,10 @@ import XCTest
 @testable import MovieQuiz
 
 final class MovieQuizViewControllerProtocolMock: MovieQuizViewControllerProtocol {
+    func show(quiz result: MovieQuiz.AlertModel) {
+        
+    }
+    
     func setButtonDisable(isDisable: Bool) {
         
     }
@@ -20,10 +24,6 @@ final class MovieQuizViewControllerProtocolMock: MovieQuizViewControllerProtocol
     }
     
     func show(quiz step: QuizStepViewModel) {
-    
-    }
-    
-    func show(quiz result: QuizResultsViewModel) {
     
     }
     

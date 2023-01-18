@@ -24,8 +24,7 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var path = print(NSHomeDirectory())
-        print(path)
+
         alertPresenter?.alertDelegate = self
         presenter = MovieQuizPresenter(viewController: self)
     }
@@ -47,19 +46,8 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
         textLabel.text = step.question
     }
     
-    func show(quiz result: QuizResultsViewModel) {
-        presenter.saveStatistic()
-        let alertModel = AlertModel(
-            title: result.title,
-            message:  presenter.makeResultMessage(), // result.text,
-            buttonText: result.buttonText,
-            completion: { [weak self] _ in
-                guard let self = self else {return}
-                self.presenter.restartGame()
-            }
-        )
-        
-        alertPresenter?.presentGameOverAlert(model: alertModel, identifier: "gameOverAlertId")
+    func show(quiz rezult: AlertModel) {
+        alertPresenter?.presentGameOverAlert(model: rezult, identifier: "gameOverAlertId")
     }
     
     func highlightImageBorder(isCorrectAnswer: Bool) {
