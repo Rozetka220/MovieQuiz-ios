@@ -1,9 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, MovieQuizViewControllerProtocol {
-    
-    var alertDelegate: UIViewController?
-    
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     var delegate: QuestionFactoryDelegate?
     
     // MARK: - Lifecycle
@@ -28,8 +25,6 @@ final class MovieQuizViewController: UIViewController, AlertPresenterProtocol, M
         alertPresenter?.alertDelegate = self
         presenter = MovieQuizPresenter(viewController: self)
     }
-    
-    func presentGameOverAlert(model: AlertModel, identifier: String){}
     
     @IBAction private func yesBtnPressed(_ sender: Any) {
         presenter.yesBtnPressed()
